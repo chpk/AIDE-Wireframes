@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIDE Research Assistant — Wireframes</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body, #root { height: 100%; width: 100%; }
+    body { font-family: 'Segoe UI', 'Noto Sans', system-ui, sans-serif; }
+    button { font-family: inherit; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const C = {
+      primary: "#1B6B3A", primaryLight: "#E8F5ED", primaryDark: "#0D4F26",
+      gold: "#C89B3C", goldLight: "#FFF8E8", goldDark: "#A07B1E",
+      accent: "#1565C0", accentLight: "#E3F2FD",
+      bg: "#FAFBFC", surface: "#FFFFFF", surfaceAlt: "#F4F6F8",
+      border: "#E2E8F0", borderLight: "#F0F2F5",
+      text: "#1A202C", textSecondary: "#64748B", textMuted: "#94A3B8",
+      success: "#16A34A", warning: "#D97706", error: "#DC2626",
+    };
+
+    const screens = [
+      { id: "login",     label: "1. Login" },
+      { id: "home",      label: "2. Home / Chat" },
+      { id: "kb",        label: "3. Knowledge Base" },
+      { id: "thinking",  label: "4. Thinking" },
+      { id: "response",  label: "5. Response" },
+      { id: "docexplore",label: "6. Doc Explorer" },
+      { id: "ingestion", label: "7. Data Ingestion" },
+      { id: "admin",     label: "8. Admin Panel" },
+    ];
+
+    /* ── Shared ── */
+    const Badge = ({ text, color = C.primary }) => (
+      <span style={{ fontSize:11, fontWeight:600, color, background:color+"18", padding:"2px 9px", borderRadius:10, letterSpacing:0.3, whiteSpace:"nowrap" }}>{text}</span>
+    );
+
+    const GovHeader = () => (
+      <div style={{ background:`linear-gradient(135deg,${C.primary},${C.primaryDark})`, padding:"9px 24px", display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          <div style={{ width:34, height:34, borderRadius:"50%", background:C.gold, display:"flex", alignItems:"center", justifyContent:"center" }}>
+            <span style={{ fontSize:15, fontWeight:800, color:C.primaryDark }}>TS</span>
+          </div>
+          <div>
+            <div style={{ color:"#fff", fontSize:14, fontWeight:700 }}>Government of Telangana</div>
+            <div style={{ color:"rgba(255,255,255,0.7)", fontSize:11 }}>Department of Information Technology</div>
+          </div>
+        </div>
+        <div style={{ display:"flex", alignItems:"center", gap:16 }}>
+          <span style={{ color:"rgba(255,255,255,0.6)", fontSize:11 }}>తెలంగాణ ప్రభుత్వం</span>
+          <div style={{ width:1, height:20, background:"rgba(255,255,255,0.2)" }} />
+          <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+            <div style={{ width:26, height:26, borderRadius:6, background:`linear-gradient(135deg,${C.gold},${C.goldDark})`, display:"flex", alignItems:"center", justifyContent:"center" }}>
+              <span style={{ fontSize:10, fontWeight:800, color:"#fff" }}>NA</span>
+            </div>
+            <span style={{ color:"#fff", fontSize:12, fontWeight:600, letterSpacing:1 }}>NITI AIDE</span>
+          </div>
+        </div>
+      </div>
+    );
+
+    const Sidebar = ({ active = "chat" }) => {
+      const items = [
+        { id:"chat",      label:"Assistant" },
+        { id:"kb",        label:"Knowledge Base" },
+        { id:"docs",      label:"Documents" },
+        { id:"ingestion", label:"Data Ingestion" },
+        { id:"analytics", label:"Analytics" },
+        { id:"admin",     label:"Settings" },
+      ];
+      return (
+        <div style={{ width:220, background:C.surface, borderRight:`1px solid ${C.border}`, display:"flex", flexDirection:"column", flexShrink:0 }}>
+          <div style={{ padding:"16px 14px", borderBottom:`1px solid ${C.border}` }}>
+            <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+              <div style={{ width:34, height:34, borderRadius:8, background:`linear-gradient(135deg,${C.primary},${C.gold})`, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                <span style={{ color:"#fff", fontWeight:800, fontSize:13 }}>A</span>
+              </div>
+              <div>
+                <div style={{ fontSize:15, fontWeight:700, color:C.primary }}>AIDE</div>
+                <div style={{ fontSize:10, color:C.textMuted }}>Research Assistant</div>
+              </div>
+            </div>
+          </div>
+          <div style={{ padding:"8px", flex:1 }}>
+            {items.map(item => (
+              <div key={item.id} style={{ padding:"11px 12px", borderRadius:8, marginBottom:2, fontSize:14,
+                background: active===item.id ? C.primaryLight : "transparent",
+                color: active===item.id ? C.primary : C.textSecondary,
+                fontWeight: active===item.id ? 600 : 400,
+                border: active===item.id ? `1px solid ${C.primary}22` : "1px solid transparent" }}>
+                {item.label}
+              </div>
+            ))}
+          </div>
+          <div style={{ padding:12, borderTop:`1px solid ${C.border}` }}>
+            <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+              <div style={{ width:32, height:32, borderRadius:"50%", background:C.primaryLight, display:"flex", alignItems:"center", justifyContent:"center", fontSize:13, fontWeight:700, color:C.primary }}>U</div>
+              <div>
+                <div style={{ fontSize:13, fontWeight:600, color:C.text }}>User</div>
+                <div style={{ fontSize:11, color:C.textMuted }}>IT Department</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const ChatInput = () => (
+      <div style={{ padding:"13px 26px 17px", borderTop:`1px solid ${C.border}`, background:C.surface, flexShrink:0 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:8, background:C.surfaceAlt, borderRadius:12, border:`1px solid ${C.border}`, padding:"11px 15px" }}>
+          <span style={{ flex:1, fontSize:14, color:C.textMuted }}>Ask a follow-up question...</span>
+          <div style={{ display:"flex", gap:6 }}>
+            {["Sources","Attach","Language"].map(l => (
+              <span key={l} style={{ fontSize:12, color:C.textMuted, padding:"5px 9px", background:C.surface, borderRadius:6, border:`1px solid ${C.border}` }}>{l}</span>
+            ))}
+          </div>
+          <div style={{ width:34, height:34, borderRadius:"50%", background:`linear-gradient(135deg,${C.primary},${C.primaryDark})`, display:"flex", alignItems:"center", justifyContent:"center" }}>
+            <span style={{ color:"#fff", fontSize:15 }}>&#8599;</span>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ── Screen 1: Login ── */
+    const LoginScreen = () => (
+      <div style={{ height:"100%", display:"flex" }}>
+        <div style={{ flex:1, background:`linear-gradient(160deg,${C.primary} 0%,${C.primaryDark} 50%,${C.gold}88 100%)`, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", padding:48, position:"relative", overflow:"hidden" }}>
+          <div style={{ position:"absolute", inset:0, background:"radial-gradient(circle at 30% 70%,rgba(200,155,60,0.15),transparent 50%)" }} />
+          <div style={{ position:"relative", zIndex:1, textAlign:"center" }}>
+            <div style={{ width:76, height:76, borderRadius:20, background:"rgba(255,255,255,0.15)", display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 22px", border:"1px solid rgba(255,255,255,0.2)" }}>
+              <span style={{ color:"#fff", fontWeight:800, fontSize:28 }}>A</span>
+            </div>
+            <h1 style={{ color:"#fff", fontSize:34, fontWeight:800, letterSpacing:-0.5 }}>AIDE Research Assistant</h1>
+            <p style={{ color:"rgba(255,255,255,0.75)", fontSize:15, margin:"10px 0 0", maxWidth:360, lineHeight:1.6 }}>
+              Knowledge Assistant with Intelligent Research Capabilities for the Government of Telangana
+            </p>
+          </div>
+        </div>
+        <div style={{ width:460, display:"flex", flexDirection:"column", justifyContent:"center", padding:52, background:C.surface }}>
+          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:34 }}>
+            <div style={{ width:38, height:38, borderRadius:"50%", background:C.gold, display:"flex", alignItems:"center", justifyContent:"center" }}>
+              <span style={{ fontSize:15, fontWeight:800, color:C.primaryDark }}>TS</span>
+            </div>
+            <div>
+              <div style={{ fontSize:13, fontWeight:700, color:C.primary }}>Government of Telangana</div>
+              <div style={{ fontSize:11, color:C.textMuted }}>Dept. of Information Technology</div>
+            </div>
+          </div>
+          <h2 style={{ fontSize:24, fontWeight:700, color:C.text, marginBottom:4 }}>Welcome Back</h2>
+          <p style={{ color:C.textSecondary, fontSize:14, marginBottom:26 }}>Sign in with your government credentials</p>
+          {[["Employee ID","TS-IT-2024-XXXX"],["Password","••••••••••••"]].map(([lbl,ph]) => (
+            <div key={lbl} style={{ marginBottom:18 }}>
+              <label style={{ fontSize:13, fontWeight:600, color:C.textSecondary, display:"block", marginBottom:6 }}>{lbl}</label>
+              <div style={{ border:`1px solid ${C.border}`, borderRadius:8, padding:"11px 14px", fontSize:15, color:C.textMuted, background:C.surfaceAlt }}>{ph}</div>
+            </div>
+          ))}
+          <div style={{ marginBottom:22 }}>
+            <label style={{ fontSize:13, fontWeight:600, color:C.textSecondary, display:"block", marginBottom:6 }}>OTP (Sent to registered mobile)</label>
+            <div style={{ display:"flex", gap:8 }}>
+              {[1,2,3,4,5,6].map(i => (
+                <div key={i} style={{ width:42, height:46, border:`1px solid ${C.border}`, borderRadius:8, display:"flex", alignItems:"center", justifyContent:"center", fontSize:20, fontWeight:600, color:C.text, background:C.surfaceAlt }}>•</div>
+              ))}
+            </div>
+          </div>
+          <div style={{ background:`linear-gradient(135deg,${C.primary},${C.primaryDark})`, color:"#fff", padding:"13px 0", borderRadius:10, textAlign:"center", fontWeight:700, fontSize:15, cursor:"pointer" }}>
+            Sign In Securely
+          </div>
+          <p style={{ fontSize:11, color:C.textMuted, textAlign:"center", marginTop:18, lineHeight:1.6 }}>
+            Protected by OTP-based 2FA + RBAC &nbsp;|&nbsp; AES-256 Encryption<br/>DPDPA 2023 &amp; IT Act 2000 Compliant
+          </p>
+        </div>
+      </div>
+    );
+
+    /* ── Screen 2: Home ── */
+    const HomeScreen = () => (
+      <div style={{ height:"100%", display:"flex", flexDirection:"column" }}>
+        <GovHeader />
+        <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
+          <Sidebar active="chat" />
+          <div style={{ flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", background:C.bg, padding:32 }}>
+            <div style={{ width:58, height:58, borderRadius:16, background:`linear-gradient(135deg,${C.primary},${C.gold})`, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:18 }}>
+              <span style={{ color:"#fff", fontWeight:800, fontSize:22 }}>A</span>
+            </div>
+            <h1 style={{ fontSize:28, fontWeight:700, marginBottom:8 }}>
+              <span style={{ color:C.primary }}>Hello, </span><span style={{ color:C.gold }}>User</span>
+            </h1>
+            <p style={{ color:C.textSecondary, fontSize:15, marginBottom:30 }}>How can I help you today?</p>
+            <div style={{ display:"flex", gap:12, marginBottom:30, flexWrap:"wrap", justifyContent:"center" }}>
+              {["Summarize GO No. 142 on IT policy","Compare budget allocations 2023 vs 2024","Find all circulars related to Digital Telangana"].map((s,i) => (
+                <div key={i} style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:12, padding:"13px 18px", cursor:"pointer", maxWidth:260, fontSize:13, color:C.textSecondary }}>{s}</div>
+              ))}
+            </div>
+            <div style={{ width:"100%", maxWidth:660, background:C.surface, borderRadius:16, border:`1px solid ${C.border}`, padding:4, boxShadow:"0 2px 12px rgba(0,0,0,0.04)" }}>
+              <div style={{ padding:"13px 16px", fontSize:15, color:C.textMuted }}>Ask me anything about Government Orders, policies, circulars...</div>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"4px 10px 9px" }}>
+                <div style={{ display:"flex", gap:6 }}>
+                  {["Sources & Agents","Attach","EN / TE / HI"].map(l => (
+                    <div key={l} style={{ background:l==="Sources & Agents"?C.primaryLight:C.surfaceAlt, border:l==="Sources & Agents"?`1px solid ${C.primary}33`:"1px solid transparent", borderRadius:8, padding:"6px 11px", fontSize:12, fontWeight:l==="Sources & Agents"?600:400, color:l==="Sources & Agents"?C.primary:C.textMuted, cursor:"pointer" }}>{l}</div>
+                  ))}
+                </div>
+                <div style={{ width:38, height:38, borderRadius:"50%", background:`linear-gradient(135deg,${C.primary},${C.primaryDark})`, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer" }}>
+                  <span style={{ color:"#fff", fontSize:17 }}>&#8599;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ── Screen 3: Knowledge Base ── */
+    const KBScreen = () => (
+      <div style={{ height:"100%", display:"flex", flexDirection:"column" }}>
+        <GovHeader />
+        <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
+          <Sidebar active="kb" />
+          <div style={{ flex:1, background:C.bg, padding:26, overflowY:"auto" }}>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:22 }}>
+              <div>
+                <h2 style={{ fontSize:21, fontWeight:700, color:C.text }}>Knowledge Base</h2>
+                <p style={{ fontSize:13, color:C.textSecondary, marginTop:4 }}>Select collections to include in your research queries</p>
+              </div>
+              <div style={{ display:"flex", gap:8 }}>
+                <div style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, padding:"9px 15px", fontSize:13, color:C.textSecondary }}>Search collections...</div>
+                <div style={{ background:C.primary, color:"#fff", borderRadius:8, padding:"9px 15px", fontSize:13, fontWeight:600, cursor:"pointer" }}>+ New Collection</div>
+              </div>
+            </div>
+            <div style={{ display:"flex", gap:6, marginBottom:18 }}>
+              {["All Collections","Government Orders","Circulars","Reports","Policies"].map((t,i) => (
+                <div key={t} style={{ padding:"7px 15px", borderRadius:20, fontSize:12, fontWeight:i===0?600:400, background:i===0?C.primary:C.surface, color:i===0?"#fff":C.textSecondary, border:`1px solid ${i===0?C.primary:C.border}`, cursor:"pointer" }}>{t}</div>
+              ))}
+            </div>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:16 }}>
+              {[
+                { name:"Government Orders",   files:464,  size:"1.2 GB", status:"Active",     color:C.primary,  desc:"GOs from 2018–2026" },
+                { name:"Policy Circulars",    files:167,  size:"380 MB", status:"Active",     color:C.accent,   desc:"IT Department circulars" },
+                { name:"Field Reports",       files:89,   size:"620 MB", status:"Indexing",   color:C.warning,  desc:"District-level field reports" },
+                { name:"Budget Documents",    files:45,   size:"210 MB", status:"Active",     color:C.gold,     desc:"Annual budget allocations" },
+                { name:"Telugu GOs (OCR)",    files:312,  size:"890 MB", status:"Active",     color:C.success,  desc:"OCR-processed Telugu documents" },
+                { name:"Handwritten Notes",   files:56,   size:"340 MB", status:"Processing", color:C.error,    desc:"TrOCR scanned handwritten notes" },
+              ].map(kb => (
+                <div key={kb.name} style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, padding:18, cursor:"pointer" }}>
+                  <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom:14 }}>
+                    <div style={{ width:42, height:42, borderRadius:10, background:kb.color+"18", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                      <span style={{ fontSize:11, fontWeight:700, color:kb.color }}>KB</span>
+                    </div>
+                    <Badge text={kb.status} color={kb.status==="Active"?C.success:C.warning} />
+                  </div>
+                  <div style={{ fontSize:15, fontWeight:600, color:C.text, marginBottom:4 }}>{kb.name}</div>
+                  <div style={{ fontSize:12, color:C.textMuted, marginBottom:12 }}>{kb.desc}</div>
+                  <div style={{ display:"flex", gap:14, fontSize:12, color:C.textSecondary }}>
+                    <span>{kb.files} files</span><span>{kb.size}</span>
+                  </div>
+                  <div style={{ marginTop:12, height:4, background:C.borderLight, borderRadius:2 }}>
+                    <div style={{ width:kb.status==="Active"?"100%":"65%", height:"100%", background:kb.color, borderRadius:2 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop:22, padding:18, background:C.goldLight, borderRadius:12, border:`1px solid ${C.gold}33`, display:"flex", alignItems:"center", gap:14 }}>
+              <div style={{ width:10, height:10, borderRadius:"50%", background:C.gold, flexShrink:0 }} />
+              <div>
+                <div style={{ fontSize:13, fontWeight:600, color:C.goldDark }}>Selected Collections: 2 of 6</div>
+                <div style={{ fontSize:12, color:C.textSecondary }}>Government Orders (464 files) and Policy Circulars (167 files) are active for your current session.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ── Screen 4: Thinking ── */
+    const ThinkingScreen = () => (
+      <div style={{ height:"100%", display:"flex", flexDirection:"column" }}>
+        <GovHeader />
+        <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
+          <Sidebar active="chat" />
+          <div style={{ flex:1, background:C.bg, display:"flex", flexDirection:"column" }}>
+            <div style={{ flex:1, padding:26, overflowY:"auto" }}>
+              <div style={{ display:"flex", justifyContent:"flex-end", marginBottom:22 }}>
+                <div style={{ display:"flex", alignItems:"flex-start", gap:10, maxWidth:"62%" }}>
+                  <div style={{ background:C.primary, color:"#fff", borderRadius:"16px 16px 4px 16px", padding:"13px 17px", fontSize:14, lineHeight:1.6 }}>
+                    What are the key budget allocations for IT infrastructure in GO No. 142 of 2025, and how do they compare with 2024 allocations?
+                  </div>
+                  <div style={{ width:30, height:30, borderRadius:"50%", background:C.primaryLight, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                    <span style={{ fontSize:12, fontWeight:700, color:C.primary }}>U</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ display:"flex", gap:10, maxWidth:"72%" }}>
+                <div style={{ width:34, height:34, borderRadius:10, background:`linear-gradient(135deg,${C.primary},${C.gold})`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  <span style={{ color:"#fff", fontWeight:800, fontSize:13 }}>A</span>
+                </div>
+                <div style={{ flex:1 }}>
+                  <div style={{ fontSize:14, fontWeight:700, color:C.primary, marginBottom:9 }}>AIDE Research Assistant</div>
+                  <div style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, padding:18 }}>
+                    <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
+                      <div style={{ width:8, height:8, borderRadius:"50%", background:C.warning }} />
+                      <span style={{ fontSize:13, fontWeight:600, color:C.warning }}>PROCESSING</span>
+                    </div>
+                    {[
+                      { step:"Query Expansion",      detail:"Decomposing into sub-queries for GO 142, budget data, and 2024 comparisons", status:"done" },
+                      { step:"Query Planning",        detail:"Targeting: Government Orders collection + Budget Documents collection",       status:"done" },
+                      { step:"Multi-Source Retrieval",detail:"Searching 4 sub-queries across 2 collections (hybrid: dense + BM25)",       status:"done" },
+                      { step:"Re-Ranking",            detail:"Cross-encoder scoring 24 retrieved passages...",                             status:"active" },
+                      { step:"Answer Generation",     detail:"Waiting for re-ranking to complete",                                         status:"pending" },
+                      { step:"Self-Correction",       detail:"Will verify factual grounding after generation",                             status:"pending" },
+                    ].map((s,i) => (
+                      <div key={i} style={{ display:"flex", alignItems:"flex-start", gap:12, marginBottom:10, opacity:s.status==="pending"?0.45:1 }}>
+                        <div style={{ width:22, height:22, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginTop:1,
+                          background:s.status==="done"?C.success+"20":s.status==="active"?C.warning+"20":C.borderLight }}>
+                          <span style={{ fontSize:11 }}>{s.status==="done"?"✓":s.status==="active"?"~":"○"}</span>
+                        </div>
+                        <div>
+                          <div style={{ fontSize:13, fontWeight:600, color:C.text }}>{s.step}</div>
+                          <div style={{ fontSize:12, color:C.textMuted }}>{s.detail}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ChatInput />
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ── Screen 5: Response ── */
+    const ResponseScreen = () => (
+      <div style={{ height:"100%", display:"flex", flexDirection:"column" }}>
+        <GovHeader />
+        <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
+          <Sidebar active="chat" />
+          <div style={{ flex:1, background:C.bg, display:"flex", flexDirection:"column" }}>
+            <div style={{ flex:1, padding:26, overflowY:"auto" }}>
+              <div style={{ display:"flex", justifyContent:"flex-end", marginBottom:22 }}>
+                <div style={{ background:C.primary, color:"#fff", borderRadius:"16px 16px 4px 16px", padding:"13px 17px", fontSize:14, maxWidth:"55%" }}>
+                  What are the key IT budget allocations in GO No. 142?
+                </div>
+              </div>
+              <div style={{ display:"flex", gap:10, marginBottom:22 }}>
+                <div style={{ width:34, height:34, borderRadius:10, background:`linear-gradient(135deg,${C.primary},${C.gold})`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  <span style={{ color:"#fff", fontWeight:800, fontSize:13 }}>A</span>
+                </div>
+                <div style={{ flex:1, maxWidth:"76%" }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:9, flexWrap:"wrap" }}>
+                    <span style={{ fontSize:14, fontWeight:700, color:C.primary }}>AIDE</span>
+                    <Badge text="Done" color={C.success} />
+                    <Badge text="Confidence: 94%" color={C.accent} />
+                    <Badge text="6 sources" color={C.textSecondary} />
+                  </div>
+                  <div style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, padding:18 }}>
+                    <p style={{ fontSize:14, lineHeight:1.75, color:C.text, marginBottom:14 }}>
+                      GO No. 142 (December 2025) allocates a total of <strong>&#8377;2,340 Crores</strong> for IT infrastructure development across Telangana. Key allocations include:
+                    </p>
+                    <div style={{ marginBottom:14 }}>
+                      {[
+                        "State Data Centre Expansion: ₹450 Cr (up 28% from 2024's ₹352 Cr)",
+                        "Digital Telangana Mission (T-Fiber): ₹680 Cr for last-mile connectivity",
+                        "AI & Emerging Tech Fund: ₹120 Cr (new allocation, not present in 2024)",
+                        "Cybersecurity Infrastructure: ₹85 Cr (up 42% from 2024's ₹60 Cr)",
+                      ].map((item,i) => (
+                        <div key={i} style={{ display:"flex", gap:10, marginBottom:8, fontSize:13, color:C.text, lineHeight:1.6 }}>
+                          <span style={{ color:C.primary, fontWeight:700 }}>–</span>
+                          <span style={{ flex:1 }}>{item}</span>
+                          <span style={{ background:C.accentLight, color:C.accent, fontSize:10, fontWeight:700, padding:"1px 6px", borderRadius:4, flexShrink:0, height:18, lineHeight:"18px" }}>[{i+1}]</span>
+                        </div>
+                      ))}
+                    </div>
+                    <p style={{ fontSize:13, color:C.textSecondary, lineHeight:1.7, marginBottom:14 }}>
+                      Compared to 2024, total IT infrastructure spending increased by 18.7%. The most significant new addition is the AI &amp; Emerging Tech Fund, reflecting the state's commitment to the Viksit Bharat digital agenda.
+                    </p>
+                    <div style={{ borderTop:`1px solid ${C.border}`, paddingTop:14 }}>
+                      <div style={{ fontSize:12, fontWeight:700, color:C.textSecondary, marginBottom:10 }}>Sources &amp; Citations</div>
+                      {[
+                        { id:1, doc:"GO_142_IT_Budget_2025.pdf",       page:"Page 3–7",    score:"98%" },
+                        { id:2, doc:"GO_118_IT_Budget_2024.pdf",        page:"Page 4–6",    score:"94%" },
+                        { id:3, doc:"Digital_Telangana_Circular_Q4.pdf",page:"Section 2.3", score:"89%" },
+                      ].map(c => (
+                        <div key={c.id} style={{ display:"flex", alignItems:"center", gap:9, padding:"7px 11px", background:C.surfaceAlt, borderRadius:6, marginBottom:4, fontSize:12, cursor:"pointer" }}>
+                          <span style={{ background:C.accentLight, color:C.accent, fontWeight:700, width:20, height:20, borderRadius:4, display:"flex", alignItems:"center", justifyContent:"center", fontSize:10 }}>{c.id}</span>
+                          <span style={{ color:C.accent, fontWeight:500 }}>{c.doc}</span>
+                          <span style={{ color:C.textMuted }}>| {c.page}</span>
+                          <span style={{ marginLeft:"auto", color:C.success, fontWeight:600 }}>{c.score}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ display:"flex", gap:6, marginTop:9 }}>
+                    {["Helpful","Not Helpful","Copy","Regenerate","Export PDF"].map(a => (
+                      <div key={a} style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:6, padding:"6px 11px", fontSize:12, color:C.textSecondary, cursor:"pointer" }}>{a}</div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ChatInput />
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ── Screen 6: Doc Explorer ── */
+    const DocExplorer = () => (
+      <div style={{ height:"100%", display:"flex", flexDirection:"column" }}>
+        <GovHeader />
+        <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
+          <Sidebar active="docs" />
+          <div style={{ flex:1, background:C.bg, padding:26, overflowY:"auto" }}>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:18 }}>
+              <h2 style={{ fontSize:21, fontWeight:700, color:C.text }}>Document Explorer</h2>
+              <div style={{ display:"flex", gap:8 }}>
+                <div style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, padding:"9px 15px", fontSize:13, color:C.textSecondary, width:280 }}>Search by title, GO number, date...</div>
+                <div style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, padding:"9px 15px", fontSize:13, color:C.textSecondary, cursor:"pointer" }}>Filter &#9660;</div>
+              </div>
+            </div>
+            <div style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, overflow:"hidden" }}>
+              <div style={{ display:"grid", gridTemplateColumns:"50px 1fr 130px 110px 90px 70px 110px", padding:"11px 16px", background:C.surfaceAlt, borderBottom:`1px solid ${C.border}`, fontSize:12, fontWeight:700, color:C.textSecondary }}>
+                <span>Type</span><span>Document Name</span><span>Department</span><span>Date</span><span>Language</span><span>Pages</span><span>Status</span>
+              </div>
+              {[
+                { type:"PDF", name:"GO_142_IT_Budget_2025.pdf",         dept:"IT Dept.",   date:"Dec 2025", lang:"English",   pages:24, status:"Indexed" },
+                { type:"PDF", name:"GO_138_Cybersecurity_Policy.pdf",   dept:"IT Dept.",   date:"Nov 2025", lang:"English",   pages:18, status:"Indexed" },
+                { type:"PDF", name:"TS_Circular_Digital_Q4.pdf",        dept:"IT Dept.",   date:"Oct 2025", lang:"Bilingual", pages:12, status:"Indexed" },
+                { type:"PDF", name:"Field_Report_Warangal.pdf",         dept:"Rural Dev.", date:"Sep 2025", lang:"Telugu",    pages:8,  status:"OCR Done" },
+                { type:"IMG", name:"Handwritten_Note_CS_092.jpg",       dept:"Chief Sec.", date:"Aug 2025", lang:"English",   pages:3,  status:"TrOCR" },
+                { type:"PDF", name:"GO_118_IT_Budget_2024.pdf",         dept:"IT Dept.",   date:"Dec 2024", lang:"English",   pages:22, status:"Indexed" },
+                { type:"DOC", name:"Policy_AIGovernance_Draft.docx",    dept:"IT Dept.",   date:"Jul 2025", lang:"English",   pages:34, status:"Pending" },
+              ].map((d,i) => (
+                <div key={i} style={{ display:"grid", gridTemplateColumns:"50px 1fr 130px 110px 90px 70px 110px", padding:"12px 16px", borderBottom:`1px solid ${C.borderLight}`, fontSize:13, alignItems:"center", cursor:"pointer" }}>
+                  <span style={{ fontSize:10, fontWeight:700, color:C.textMuted, background:C.surfaceAlt, borderRadius:4, padding:"2px 5px", textAlign:"center" }}>{d.type}</span>
+                  <span style={{ color:C.accent, fontWeight:500 }}>{d.name}</span>
+                  <span style={{ color:C.textSecondary }}>{d.dept}</span>
+                  <span style={{ color:C.textMuted }}>{d.date}</span>
+                  <Badge text={d.lang} color={d.lang==="Telugu"?C.gold:d.lang==="Bilingual"?C.primary:C.accent} />
+                  <span style={{ color:C.textMuted }}>{d.pages} pg</span>
+                  <Badge text={d.status} color={d.status==="Indexed"?C.success:d.status==="Pending"?C.warning:C.accent} />
+                </div>
+              ))}
+            </div>
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:14, fontSize:13, color:C.textSecondary }}>
+              <span>Showing 1–7 of 1,133 documents</span>
+              <div style={{ display:"flex", gap:4 }}>
+                {["Prev","1","2","3","...","162","Next"].map(p => (
+                  <div key={p} style={{ padding:"5px 11px", borderRadius:6, background:p==="1"?C.primary:C.surface, color:p==="1"?"#fff":C.textSecondary, border:`1px solid ${C.border}`, fontSize:12, cursor:"pointer" }}>{p}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ── Screen 7: Ingestion ── */
+    const IngestionScreen = () => (
+      <div style={{ height:"100%", display:"flex", flexDirection:"column" }}>
+        <GovHeader />
+        <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
+          <Sidebar active="ingestion" />
+          <div style={{ flex:1, background:C.bg, padding:26, overflowY:"auto" }}>
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:22 }}>
+              <div>
+                <h2 style={{ fontSize:21, fontWeight:700, color:C.text }}>Data Ingestion Pipeline</h2>
+                <p style={{ fontSize:13, color:C.textSecondary, marginTop:4 }}>Monitor document processing, OCR, and vector indexing</p>
+              </div>
+              <div style={{ display:"flex", gap:8 }}>
+                <div style={{ background:C.surface, border:`1px solid ${C.border}`, borderRadius:8, padding:"9px 15px", fontSize:13, color:C.textSecondary }}>Auto-refresh: 30s</div>
+                <div style={{ background:C.primary, color:"#fff", borderRadius:8, padding:"9px 15px", fontSize:13, fontWeight:600, cursor:"pointer" }}>Upload Documents</div>
+              </div>
+            </div>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:13, marginBottom:22 }}>
+              {[
+                { label:"Total Documents", value:"1,133", color:C.primary },
+                { label:"Processed",       value:"1,089", color:C.success },
+                { label:"In Queue",        value:"28",    color:C.warning },
+                { label:"Failed",          value:"3",     color:C.error },
+                { label:"Corpus Size",     value:"1.4 TB",color:C.accent },
+              ].map(s => (
+                <div key={s.label} style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, padding:18 }}>
+                  <div style={{ fontSize:12, fontWeight:600, color:C.textMuted, marginBottom:8 }}>{s.label}</div>
+                  <div style={{ fontSize:26, fontWeight:800, color:s.color }}>{s.value}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, padding:22, marginBottom:22 }}>
+              <div style={{ fontSize:15, fontWeight:700, color:C.text, marginBottom:18 }}>Pipeline Status — Live</div>
+              <div style={{ display:"flex", gap:6, alignItems:"stretch" }}>
+                {[
+                  { stage:"1. Intake",    count:"5 queued",      color:C.primary, pct:85 },
+                  { stage:"2. OCR",       count:"3 processing",  color:C.success, pct:72 },
+                  { stage:"3. Chunking",  count:"8 in progress", color:C.accent,  pct:90 },
+                  { stage:"4. Embedding", count:"12 vectorizing",color:C.gold,    pct:68 },
+                  { stage:"5. Metadata",  count:"0 pending",     color:C.warning, pct:100 },
+                ].map((p,i) => (
+                  <div key={i} style={{ flex:1, position:"relative" }}>
+                    <div style={{ background:p.color+"12", border:`1px solid ${p.color}33`, borderRadius:10, padding:15, textAlign:"center" }}>
+                      <div style={{ fontSize:13, fontWeight:700, color:p.color, marginBottom:5 }}>{p.stage}</div>
+                      <div style={{ fontSize:12, color:C.textMuted, marginBottom:9 }}>{p.count}</div>
+                      <div style={{ height:6, background:C.borderLight, borderRadius:3 }}>
+                        <div style={{ width:`${p.pct}%`, height:"100%", background:p.color, borderRadius:3 }} />
+                      </div>
+                      <div style={{ fontSize:11, color:C.textMuted, marginTop:5 }}>{p.pct}%</div>
+                    </div>
+                    {i < 4 && <div style={{ position:"absolute", right:-10, top:"50%", transform:"translateY(-50%)", fontSize:14, color:C.textMuted }}>&#8594;</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, overflow:"hidden" }}>
+              <div style={{ padding:"13px 18px", borderBottom:`1px solid ${C.border}`, fontSize:15, fontWeight:700, color:C.text }}>Recent Ingestion Activity</div>
+              {[
+                { file:"GO_156_Land_Revenue.pdf",             stage:"Embedding",           status:"processing", time:"2 min ago",  lang:"English" },
+                { file:"Circular_TelanganaKu_Haritha.pdf",    stage:"OCR",                 status:"processing", time:"5 min ago",  lang:"Telugu" },
+                { file:"HandNote_Commissioner_Jan26.jpg",     stage:"TrOCR",               status:"processing", time:"8 min ago",  lang:"English" },
+                { file:"Budget_Supplementary_Q3.pdf",         stage:"Complete",            status:"done",       time:"12 min ago", lang:"English" },
+                { file:"GO_155_Education_Policy.pdf",         stage:"Complete",            status:"done",       time:"18 min ago", lang:"Bilingual" },
+                { file:"District_Report_Karimnagar.pdf",      stage:"Failed — OCR Error",  status:"error",      time:"22 min ago", lang:"Telugu" },
+              ].map((a,i) => (
+                <div key={i} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"11px 18px", borderBottom:`1px solid ${C.borderLight}`, fontSize:13 }}>
+                  <div style={{ display:"flex", alignItems:"center", gap:10, flex:1 }}>
+                    <div style={{ width:8, height:8, borderRadius:"50%", background:a.status==="done"?C.success:a.status==="error"?C.error:C.warning }} />
+                    <span style={{ fontWeight:500, color:C.text }}>{a.file}</span>
+                  </div>
+                  <Badge text={a.lang} color={a.lang==="Telugu"?C.gold:C.accent} />
+                  <span style={{ width:140, textAlign:"center", color:a.status==="error"?C.error:C.textSecondary }}>{a.stage}</span>
+                  <span style={{ width:90, textAlign:"right", color:C.textMuted }}>{a.time}</span>
+                  {a.status==="error" && <span style={{ fontSize:12, color:C.accent, marginLeft:10, cursor:"pointer", fontWeight:600 }}>Retry</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ── Screen 8: Admin ── */
+    const AdminScreen = () => (
+      <div style={{ height:"100%", display:"flex", flexDirection:"column" }}>
+        <GovHeader />
+        <div style={{ flex:1, display:"flex", overflow:"hidden" }}>
+          <Sidebar active="admin" />
+          <div style={{ flex:1, background:C.bg, padding:26, overflowY:"auto" }}>
+            <h2 style={{ fontSize:21, fontWeight:700, color:C.text, marginBottom:22 }}>System Administration</h2>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:14, marginBottom:22 }}>
+              {[
+                { label:"LLM Model",   value:"Qwen2.5-72B (Q4)", detail:"96 GB VRAM | vLLM",          color:C.primary },
+                { label:"GPU Status",  value:"RTX PRO 6000",      detail:"87% Utilized | 72°C",        color:C.success },
+                { label:"Vector DB",   value:"1.2M vectors",      detail:"pgvector HNSW | 48 GB index",color:C.accent },
+                { label:"Uptime",      value:"99.97%",            detail:"Last restart: 14 days ago",  color:C.gold },
+              ].map(s => (
+                <div key={s.label} style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, padding:18 }}>
+                  <div style={{ fontSize:12, fontWeight:600, color:C.textMuted, marginBottom:9 }}>{s.label}</div>
+                  <div style={{ fontSize:19, fontWeight:800, color:s.color }}>{s.value}</div>
+                  <div style={{ fontSize:12, color:C.textSecondary, marginTop:5 }}>{s.detail}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ background:C.surface, borderRadius:12, border:`1px solid ${C.border}`, padding:22, marginBottom:18 }}>
+              <div style={{ fontSize:15, fontWeight:700, color:C.text, marginBottom:18 }}>User Access (RBAC)</div>
+              {[
+                { name:"IAS Officer A", role:"Admin",   collections:"All",          lastActive:"2 min ago", online:true },
+                { name:"IPS Officer B", role:"Analyst", collections:"GO, Circulars",lastActive:"1 hr ago",  online:true },
+                { name:"IT Secretary",  role:"Admin",   collections:"All",          lastActive:"3 hrs ago", online:false },
+              ].map((u,i) => (
+                <div key={i} style={{ display:"flex", alignItems:"center", gap:13, padding:"11px 0", borderBottom:i<2?`1px solid ${C.borderLight}`:"none" }}>
+                  <div style={{ width:34, height:34, borderRadius:"50%", background:C.primaryLight, display:"flex", alignItems:"center", justifyContent:"center", fontSize:13, fontWeight:700, color:C.primary }}>{u.name[0]}</div>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontSize:14, fontWeight:600, color:C.text }}>{u.name}</div>
+                    <div style={{ fontSize:12, color:C.textMuted }}>Collections: {u.collections}</div>
+                  </div>
+                  <Badge text={u.role} color={u.role==="Admin"?C.primary:C.accent} />
+                  <span style={{ fontSize:12, color:C.textMuted }}>{u.lastActive}</span>
+                  <div style={{ width:8, height:8, borderRadius:"50%", background:u.online?C.success:C.textMuted }} />
+                </div>
+              ))}
+            </div>
+            <div style={{ background:C.primaryLight, borderRadius:12, border:`1px solid ${C.primary}33`, padding:22 }}>
+              <div style={{ fontSize:15, fontWeight:700, color:C.primary, marginBottom:14 }}>Security &amp; Compliance</div>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
+                {[
+                  { label:"Encryption",        value:"AES-256 (Rest) + TLS 1.3 (Transit)" },
+                  { label:"Authentication",     value:"OTP-based 2FA Active" },
+                  { label:"Air-Gap Status",     value:"ENABLED — No Internet" },
+                  { label:"Audit Logs",         value:"12,847 entries (tamper-evident)" },
+                  { label:"DPDPA Compliance",   value:"Fully Compliant" },
+                  { label:"Last Security Scan", value:"March 1, 2026 — Pass" },
+                ].map(s => (
+                  <div key={s.label} style={{ fontSize:13 }}>
+                    <div style={{ fontWeight:600, color:C.primaryDark, marginBottom:3 }}>{s.label}</div>
+                    <div style={{ color:C.textSecondary }}>{s.value}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ── App Shell ── */
+    function App() {
+      const [active, setActive] = React.useState("login");
+      const screenMap = { login:<LoginScreen/>, home:<HomeScreen/>, kb:<KBScreen/>, thinking:<ThinkingScreen/>, response:<ResponseScreen/>, docexplore:<DocExplorer/>, ingestion:<IngestionScreen/>, admin:<AdminScreen/> };
+      return (
+        <div style={{ width:"100%", height:"100vh", display:"flex", flexDirection:"column" }}>
+          <div style={{ background:"#1A202C", padding:"8px 16px", display:"flex", gap:4, overflowX:"auto", flexShrink:0, alignItems:"center" }}>
+            <span style={{ color:C.gold, fontSize:12, fontWeight:700, padding:"6px 10px", whiteSpace:"nowrap", letterSpacing:0.5 }}>AIDE WIREFRAMES</span>
+            <div style={{ width:1, height:18, background:"rgba(255,255,255,0.15)", margin:"0 4px" }} />
+            {screens.map(s => (
+              <button key={s.id} onClick={() => setActive(s.id)} style={{
+                background: active===s.id ? C.primary : "rgba(255,255,255,0.08)",
+                color: active===s.id ? "#fff" : "rgba(255,255,255,0.65)",
+                border:"none", borderRadius:6, padding:"7px 13px", fontSize:12, fontWeight:600,
+                cursor:"pointer", whiteSpace:"nowrap"
+              }}>{s.label}</button>
+            ))}
+          </div>
+          <div style={{ flex:1, overflow:"hidden" }}>
+            {screenMap[active]}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
